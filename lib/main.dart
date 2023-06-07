@@ -1,200 +1,87 @@
 import 'package:flutter/material.dart';
+import 'package:netflix_demo/screens/home_screen.dart';
+import 'package:netflix_demo/screens/movie_screen.dart';
+import 'package:netflix_demo/screens/movie_details_screen.dart';
+import 'package:netflix_demo/screens/popular_movies_screen.dart';
+import 'package:netflix_demo/screens/popular_tvseries_screen.dart';
+import 'package:netflix_demo/screens/search_screen.dart';
+import 'package:netflix_demo/screens/top_rated_movies_screen.dart';
+import 'package:netflix_demo/screens/top_rated_tvseries_screen.dart';
+import 'package:netflix_demo/screens/tvseries_details_screen.dart';
+import 'package:netflix_demo/screens/user_profile_screen.dart';
 
 void main() {
-  runApp(WatchWiseApp());
+  runApp(NetflixDemoApp());
 }
 
-class WatchWiseApp extends StatelessWidget {
+class NetflixDemoApp extends StatefulWidget {
+  @override
+  _NetflixDemoAppState createState() => _NetflixDemoAppState();
+}
+
+class _NetflixDemoAppState extends State<NetflixDemoApp> {
+  bool _darkModeEnabled = false;
+
+  void _toggleDarkMode(bool? value) {
+    setState(() {
+      _darkModeEnabled = value ?? false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Watch Wise',
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        primaryColor: Colors.black,
-        scaffoldBackgroundColor: Colors.black,
-        appBarTheme: AppBarTheme(
-          backgroundColor: Colors.black,
+      title: 'Netflix Demo',
+      theme: _darkModeEnabled ? _buildDarkTheme() : _buildLightTheme(),
+      debugShowCheckedModeBanner: false, // Remove the debug banner
+      initialRoute: '/',
+      routes: {
+        '/': (context) => HomeScreen(
+          darkModeEnabled: _darkModeEnabled,
+          toggleDarkMode: _toggleDarkMode,
         ),
-      ),
-      home: HomePage(),
+        '/movie': (context) => MovieScreen(),
+        '/movie_details': (context) => MovieDetailsScreen(
+          title: 'Movie Title',
+          imageUrl: 'https://example.com/movie_image.jpg',
+          description: 'Movie description goes here.',
+          releaseDate: '2023-06-01',
+          rating: 8.5,
+        ),
+        '/tvseries_details': (context) => TVSeriesDetailsScreen(
+          title: 'TV Series Title',
+          imageUrl: 'https://example.com/tvseries_image.jpg',
+          description: 'TV series description goes here.',
+          releaseDate: '2023-06-01',
+          rating: 9.0,
+        ),
+        '/popular_movies': (context) => PopularMoviesScreen(),
+        '/top_rated_movies': (context) => TopRatedMoviesScreen(),
+        '/popular_tvseries': (context) => PopularTVSeriesScreen(),
+        '/top_rated_tvseries': (context) => TopRatedTVSeriesScreen(),
+        '/search': (context) => SearchScreen(),
+        '/user_profile': (context) => UserProfileScreen(
+          username: 'FrF',
+          email: 'farhanfuad@iut-dhaka.edu',
+          profileImage: 'https://example.com/profile.jpg',
+        ),
+      },
     );
   }
-}
 
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Watch Wise'),
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.settings,
-              color: Colors.white,
-              size: 24.0,
-            ),
-            onPressed: () {
-              // Handle settings icon button press
-            },
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          // Top part with logo, profile icon, and settings icon
-          Container(
-            padding: EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Profile icon
-                IconButton(
-                  icon: Icon(
-                    Icons.account_circle,
-                    color: Colors.white,
-                    size: 32.0,
-                  ),
-                  onPressed: () {
-                    // Handle profile icon button press
-                  },
-                ),
-                // App logo
-                Image.asset(
-                  'assets/app_logo.png',
-                  width: 100.0,
-                  height: 100.0,
-                ),
-                // Settings icon
-                IconButton(
-                  icon: Icon(
-                    Icons.settings,
-                    color: Colors.white,
-                    size: 24.0,
-                  ),
-                  onPressed: () {
-                    // Handle settings icon button press
-                  },
-                ),
-              ],
-            ),
-          ),
-          // Middle part with ListView
-          Expanded(
-            child: ListView(
-              children: [
-                // Replace these containers with your desired scrollable content
-                Container(
-                  height: 200,
-                  color: Colors.red,
-                  margin: EdgeInsets.all(16.0),
-                ),
-                Container(
-                  height: 200,
-                  color: Colors.blue,
-                  margin: EdgeInsets.all(16.0),
-                ),
-                Container(
-                  height: 200,
-                  color: Colors.green,
-                  margin: EdgeInsets.all(16.0),
-                ),
-                Container(
-                  height: 200,
-                  color: Colors.yellow,
-                  margin: EdgeInsets.all(16.0),
-                ),
-              ],
-            ),
-          ),
-          // Bottom part with icons and text
-          Container(
-            padding: EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Home icon and text
-                Column(
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.home,
-                        color: Colors.white,
-                        size: 24.0,
-                      ),
-                      onPressed: () {
-                        // Handle home icon button press
-                      },
-                    ),
-                    Text(
-                      'Home',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ],
-                ),
-                // Movies icon and text
-                Column(
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.movie,
-                        color: Colors.white,
-                        size: 24.0,
-                      ),
-                      onPressed: () {
-                        // Handle movies icon button press
-                      },
-                    ),
-                    Text(
-                      'Movies',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ],
-                ),
-                // TV shows icon and text
-                Column(
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.tv,
-                        color: Colors.white,
-                        size: 24.0,
-                      ),
-                      onPressed: () {
-                        // Handle TV shows icon button press
-                      },
-                    ),
-                    Text(
-                      'TV Shows',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ],
-                ),
-                // Search icon and text
-                Column(
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.search,
-                        color: Colors.white,
-                        size: 24.0,
-                      ),
-                      onPressed: () {
-                        // Handle search icon button press
-                      },
-                    ),
-                    Text(
-                      'Search',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+  ThemeData _buildLightTheme() {
+    return ThemeData(
+      primarySwatch: Colors.red,
+      visualDensity: VisualDensity.adaptivePlatformDensity,
+      brightness: Brightness.light,
+    );
+  }
+
+  ThemeData _buildDarkTheme() {
+    return ThemeData(
+      primarySwatch: Colors.red,
+      visualDensity: VisualDensity.adaptivePlatformDensity,
+      brightness: Brightness.dark,
     );
   }
 }
