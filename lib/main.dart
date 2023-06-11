@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'login_page.dart';
 import 'settings_page.dart';
 import 'movie_page.dart';
+import 'search_page.dart';
 
 void main() {
   runApp(WatchWiseApp());
@@ -28,6 +29,7 @@ class WatchWiseApp extends StatelessWidget {
         LoginPage.routeName: (context) => LoginPage(),
         SettingsPage.routeName: (context) => SettingsPage(),
         MoviesPage.routeName: (context) => MoviesPage(),
+        SearchPage.routeName: (context) => SearchPage(),
       },
     );
   }
@@ -79,7 +81,6 @@ class _HomePageState extends State<HomePage> {
       throw Exception('Failed to load genres');
     }
   }
-
 
   Future<List<dynamic>> fetchTrendingMovies() async {
     final apiKey = '080184f9aad4105504265a00cf70d578';
@@ -198,18 +199,18 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-
-
-
   String _getMovieGenres(dynamic movie) {
     final genreIds = List<int>.from(movie['genre_ids']);
     final genres = genreIds.map((id) => genresMap[id]).toList();
     return genres.join(', ');
   }
 
-
   void navigateToSettingsPage(BuildContext context) {
     Navigator.pushNamed(context, SettingsPage.routeName);
+  }
+
+  void navigateToSearchPage(BuildContext context) {
+    Navigator.pushNamed(context, SearchPage.routeName);
   }
 
   @override
@@ -372,7 +373,6 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   // Movies icon and text
-                  // Movies icon and text
                   Column(
                     children: [
                       IconButton(
@@ -391,26 +391,6 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
-
-                  // TV shows icon and text
-                  Column(
-                    children: [
-                      IconButton(
-                        icon: Icon(
-                          Icons.tv,
-                          color: Colors.white,
-                          size: 24.0,
-                        ),
-                        onPressed: () {
-                          // Handle TV shows icon button press
-                        },
-                      ),
-                      Text(
-                        'TV Shows',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ],
-                  ),
                   // Search icon and text
                   Column(
                     children: [
@@ -421,7 +401,7 @@ class _HomePageState extends State<HomePage> {
                           size: 24.0,
                         ),
                         onPressed: () {
-                          // Handle search icon button press
+                          navigateToSearchPage(context);
                         },
                       ),
                       Text(
