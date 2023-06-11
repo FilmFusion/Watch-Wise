@@ -6,6 +6,8 @@ import 'login_page.dart';
 import 'settings_page.dart';
 import 'movie_page.dart';
 import 'search_page.dart';
+import 'tv_shows.dart';
+
 
 void main() {
   runApp(WatchWiseApp());
@@ -30,6 +32,7 @@ class WatchWiseApp extends StatelessWidget {
         SettingsPage.routeName: (context) => SettingsPage(),
         MoviesPage.routeName: (context) => MoviesPage(),
         SearchPage.routeName: (context) => SearchPage(),
+        TVShowsPage.routeName: (context) => TVShowsPage(),
       },
     );
   }
@@ -212,6 +215,11 @@ class _HomePageState extends State<HomePage> {
   void navigateToSearchPage(BuildContext context) {
     Navigator.pushNamed(context, SearchPage.routeName);
   }
+
+  void navigateToTVShowsPage(BuildContext context) {
+    Navigator.pushNamed(context, TVShowsPage.routeName);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -400,7 +408,7 @@ class _HomePageState extends State<HomePage> {
                           size: 24.0,
                         ),
                         onPressed: () {
-                          // Handle TV shows icon button press
+                          navigateToTVShowsPage(context);
                         },
                       ),
                       Text(
