@@ -6,6 +6,8 @@ import 'login_page.dart';
 import 'settings_page.dart';
 import 'movie_page.dart';
 import 'search_page.dart';
+import 'tv_shows.dart';
+
 
 void main() {
   runApp(WatchWiseApp());
@@ -15,6 +17,7 @@ class WatchWiseApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Watch Wise',
       theme: ThemeData(
         brightness: Brightness.dark,
@@ -30,6 +33,7 @@ class WatchWiseApp extends StatelessWidget {
         SettingsPage.routeName: (context) => SettingsPage(),
         MoviesPage.routeName: (context) => MoviesPage(),
         SearchPage.routeName: (context) => SearchPage(),
+        TVShowsPage.routeName: (context) => TVShowsPage(),
       },
     );
   }
@@ -44,6 +48,8 @@ class _HomePageState extends State<HomePage> {
   List<dynamic> trendingMovies = [];
   List<dynamic> topRatedMovies = [];
   Map<int, String> genresMap = {};
+
+  get bottomNavigationBar => null;
 
   @override
   void initState() {
@@ -213,208 +219,183 @@ class _HomePageState extends State<HomePage> {
     Navigator.pushNamed(context, SearchPage.routeName);
   }
 
+  void navigateToTVShowsPage(BuildContext context) {
+    Navigator.pushNamed(context, TVShowsPage.routeName);
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Watch Wise'),
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.settings,
-              color: Colors.white,
-              size: 24.0,
-            ),
-            onPressed: () {
-              navigateToSettingsPage(context);
-            },
+      body: Column(
+        children: [
+          SizedBox(
+            height: 15,
           ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Top part with logo, profile icon, and settings icon
-            Container(
-              padding: EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Profile icon
-                  IconButton(
-                    icon: Icon(
-                      Icons.account_circle,
+          // Top part with logo, profile icon, and settings icon
+          Container(
+            padding: EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Profile icon
+                IconButton(
+                  icon: Icon(
+                    Icons.account_circle,
+                    color: Colors.white,
+                    size: 32.0,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                    );
+                  },
+                ),
+                // App logo
+                Image.asset(
+                  'assets/watch-wise-dark-logo.png',
+                  scale: 1.5,
+                ),
+                // Settings icon
+                IconButton(
+                  icon: Icon(
+                    Icons.settings,
+                    color: Colors.white,
+                    size: 24.0,
+                  ),
+                  onPressed: () {
+                    navigateToSettingsPage(context);
+                  },
+                ),
+              ],
+            ),
+          ),
+          // "Trending" text
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Trending',
+                    style: TextStyle(
                       color: Colors.white,
-                      size: 32.0,
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
+                  ),
+                ),
+                // Middle part with trending movies
+                SizedBox(
+                  height: 200.0,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: trendingMovies.length,
+                    itemBuilder: (context, index) {
+                      final movie = trendingMovies[index];
+                      return GestureDetector(
+                        onTap: () {
+                          _showMovieDetails(movie);
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Image.network(
+                            'https://image.tmdb.org/t/p/w200/${movie['poster_path']}',
+                            height: 200.0,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       );
                     },
                   ),
-                  // App logo
-                  Image.asset(
-                    'assets/app_logo_dark.png',
-                    width: 100.0,
-                    height: 100.0,
-                  ),
-                  // Settings icon
-                  IconButton(
-                    icon: Icon(
-                      Icons.settings,
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Top Rated',
+                    style: TextStyle(
                       color: Colors.white,
-                      size: 24.0,
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
                     ),
-                    onPressed: () {
-                      navigateToSettingsPage(context);
-                    },
                   ),
-                ],
-              ),
-            ),
-            // "Trending" text
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Trending',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
                 ),
-              ),
-            ),
-            // Middle part with trending movies
-            SizedBox(
-              height: 200.0,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: trendingMovies.length,
-                itemBuilder: (context, index) {
-                  final movie = trendingMovies[index];
-                  return GestureDetector(
-                    onTap: () {
-                      _showMovieDetails(movie);
+                // Middle part with top-rated movies
+                SizedBox(
+                  height: 200.0,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: topRatedMovies.length,
+                    itemBuilder: (context, index) {
+                      final movie = topRatedMovies[index];
+                      return GestureDetector(
+                        onTap: () {
+                          _showMovieDetails(movie);
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Image.network(
+                            'https://image.tmdb.org/t/p/w200/${movie['poster_path']}',
+                            height: 200.0,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      );
                     },
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Image.network(
-                        'https://image.tmdb.org/t/p/w200/${movie['poster_path']}',
-                        height: 200.0,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Top Rated',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
+              ],
             ),
-            // Middle part with top-rated movies
-            SizedBox(
-              height: 200.0,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: topRatedMovies.length,
-                itemBuilder: (context, index) {
-                  final movie = topRatedMovies[index];
-                  return GestureDetector(
-                    onTap: () {
-                      _showMovieDetails(movie);
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Image.network(
-                        'https://image.tmdb.org/t/p/w200/${movie['poster_path']}',
-                        height: 200.0,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  );
-                },
-              ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        fixedColor: Colors.red,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home,
+              color: Colors.white,
             ),
-            // Bottom part with icons and text
-            Container(
-              padding: EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Home icon and text
-                  Column(
-                    children: [
-                      IconButton(
-                        icon: Icon(
-                          Icons.home,
-                          color: Colors.white,
-                          size: 24.0,
-                        ),
-                        onPressed: () {
-                          // Handle home icon button press
-                        },
-                      ),
-                      Text(
-                        'Home',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ],
-                  ),
-                  // Movies icon and text
-                  Column(
-                    children: [
-                      IconButton(
-                        icon: Icon(
-                          Icons.movie,
-                          color: Colors.white,
-                          size: 24.0,
-                        ),
-                        onPressed: () {
-                          Navigator.pushNamed(context, MoviesPage.routeName);
-                        },
-                      ),
-                      Text(
-                        'Movies',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ],
-                  ),
-                  // Search icon and text
-                  Column(
-                    children: [
-                      IconButton(
-                        icon: Icon(
-                          Icons.search,
-                          color: Colors.white,
-                          size: 24.0,
-                        ),
-                        onPressed: () {
-                          navigateToSearchPage(context);
-                        },
-                      ),
-                      Text(
-                        'Search',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.movie,
+              color: Colors.white,
             ),
-          ],
-        ),
+            label: 'Movies',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.tv,
+              color: Colors.white,
+            ),
+            label: 'TV Shows',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.search,
+              color: Colors.white,
+            ),
+            label: 'Search',
+          ),
+        ],
+        onTap: (int index){
+          switch(index) {
+            case 0:
+            case 1:
+            case 2:
+              navigateToTVShowsPage(context);
+            case 3:
+              navigateToSearchPage(context);
+          }
+        },
       ),
     );
   }
