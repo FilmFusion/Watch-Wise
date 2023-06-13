@@ -1,50 +1,125 @@
 import 'package:flutter/material.dart';
+import 'my_button.dart';
+import 'my_textfield.dart';
+import 'square_tile.dart';
+
+import 'my_button.dart';
 
 class LoginPage extends StatelessWidget {
   static const String routeName = '/login';
+  LoginPage({super.key});
+
+  // text editing controllers
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  // sign user in method
+  void signUserIn() {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const TextField(
-              decoration: InputDecoration(
-                labelText: 'Username',
+      backgroundColor: Colors.black, // Set background color to black
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 30),
+
+              // logo
+              Image.asset(
+                'assets/app_logo_dark.png',
+                width: 100.0,
+                height: 100.0,
               ),
-            ),
-            const SizedBox(height: 16.0),
-            const TextField(
-              decoration: InputDecoration(
-                labelText: 'Password',
-              ),
-              obscureText: true,
-            ),
-            const SizedBox(height: 24.0),
-            ElevatedButton(
-              onPressed: () {
-                // Handle login button press
-              },
-              child: const Text('Login'),
-            ),
-            const SizedBox(height: 16.0),
-            TextButton(
-              onPressed: () {
-                // Handle sign up button press
-              },
-              child: const Text(
-                'Sign Up',
+
+
+
+              const SizedBox(height: 30),
+
+              // welcome back, you've been missed!
+              Text(
+                'Welcome back you\'ve been missed!',
                 style: TextStyle(
-                  color: Colors.blue,
+                  color: Colors.white, // Set text color to white
+                  fontSize: 16,
                 ),
               ),
-            ),
-          ],
+
+              const SizedBox(height: 25),
+
+              // username textfield
+              MyTextField(
+                controller: usernameController,
+                hintText: 'Username',
+                obscureText: false,
+              ),
+
+              const SizedBox(height: 10),
+
+              // password textfield
+              MyTextField(
+                controller: passwordController,
+                hintText: 'Password',
+                obscureText: true,
+              ),
+
+              const SizedBox(height: 10),
+
+              // forgot password?
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      'Forgot Password?',
+                      style: TextStyle(color: Colors.grey[600]),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 25),
+
+              // sign in button
+              MyButton(
+                onTap: signUserIn,
+              ),
+
+              const SizedBox(height: 50),
+
+              // or continue with
+
+              const SizedBox(height: 50),
+
+              // google + apple sign in buttons
+
+              //const SizedBox(height: 50),
+
+
+
+              // not a member? register now
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Not a member?',
+                    style: TextStyle(color: Colors.grey[700]),
+                  ),
+                  const SizedBox(width: 4),
+                  const Text(
+                    'Register now',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
