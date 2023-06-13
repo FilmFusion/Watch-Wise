@@ -223,6 +223,9 @@ class _HomePageState extends State<HomePage> {
     Navigator.pushNamed(context, TVShowsPage.routeName);
   }
 
+  void navigateToMoviesPage(BuildContext context) {
+    Navigator.pushNamed(context, MoviesPage.routeName);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -389,7 +392,9 @@ class _HomePageState extends State<HomePage> {
         onTap: (int index){
           switch(index) {
             case 0:
+              break;
             case 1:
+              navigateToMoviesPage(context);
             case 2:
               navigateToTVShowsPage(context);
             case 3:

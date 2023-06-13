@@ -12,6 +12,9 @@ class LoginPage extends StatelessWidget {
   // text editing controllers
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
+  String _requestToken = '';
+  String _sessionId = '';
+
 
   // sign user in method
   void signUserIn() {}
@@ -29,7 +32,7 @@ class LoginPage extends StatelessWidget {
 
               // logo
               Image.asset(
-                'assets/app_logo_dark.png',
+                'assets/watch-wise-dark-logo.png',
                 width: 100.0,
                 height: 100.0,
               ),
@@ -54,6 +57,7 @@ class LoginPage extends StatelessWidget {
                 controller: usernameController,
                 hintText: 'Username',
                 obscureText: false,
+                //textStyle: TextStyle(color: Colors.black),
               ),
 
               const SizedBox(height: 10),
