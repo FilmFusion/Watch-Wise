@@ -1,6 +1,10 @@
+import 'package:WatchWise/main.dart';
+import 'package:WatchWise/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'movie_page.dart';
 
 const String apiKey = '080184f9aad4105504265a00cf70d578';
 
@@ -163,7 +167,21 @@ class _TVShowsPageState extends State<TVShowsPage> {
       // Error handling
     }
   }
+  void navigateToHomePage(BuildContext context) {
+    Navigator.pushNamed(context, HomePage.routeName);
+  }
 
+  void navigateToSearchPage(BuildContext context) {
+    Navigator.pushNamed(context, SearchPage.routeName);
+  }
+
+  void navigateToTVShowsPage(BuildContext context) {
+    Navigator.pushNamed(context, TVShowsPage.routeName);
+  }
+
+  void navigateToMoviesPage(BuildContext context) {
+    Navigator.pushNamed(context, MoviesPage.routeName);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -181,6 +199,56 @@ class _TVShowsPageState extends State<TVShowsPage> {
             _buildSection('Top Rated', topRatedTVShows),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: 2,
+        fixedColor: Colors.red,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home,
+              color: Colors.white,
+            ),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.movie,
+              color: Colors.white,
+            ),
+            label: 'Movies',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.tv,
+              color: Colors.white,
+            ),
+            label: 'TV Shows',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.search,
+              color: Colors.white,
+            ),
+            label: 'Search',
+          ),
+        ],
+        onTap: (int index){
+          switch(index) {
+            case 0:
+              navigateToHomePage(context);
+              break;
+            case 1:
+              navigateToMoviesPage(context);
+              break;
+            case 2:
+              break;
+            case 3:
+              navigateToSearchPage(context);
+              break;
+          }
+        },
       ),
     );
   }

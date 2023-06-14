@@ -1,45 +1,60 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:provider/provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'login_page.dart';
 import 'settings_page.dart';
 import 'movie_page.dart';
 import 'search_page.dart';
 import 'tv_shows.dart';
 
-
 void main() {
   runApp(WatchWiseApp());
+  // runApp(LoginPage());
+}
+
+class SessionProvider extends ChangeNotifier {
+  String sessionId = '';
+
+  void setSessionId(String id) {
+    sessionId = id;
+    notifyListeners();
+  }
 }
 
 class WatchWiseApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Watch Wise',
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        primaryColor: Colors.black,
-        scaffoldBackgroundColor: Colors.black,
-        appBarTheme: AppBarTheme(
-          backgroundColor: Colors.black,
+    return ChangeNotifierProvider(
+      create: (context) =>SessionProvider(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Watch Wise',
+        theme: ThemeData(
+          brightness: Brightness.dark,
+          primaryColor: Colors.black,
+          scaffoldBackgroundColor: Colors.black,
+          appBarTheme: AppBarTheme(
+            backgroundColor: Colors.black,
+          ),
         ),
+        home: HomePage(),
+        routes: {
+          LoginPage.routeName: (context) => LoginPage(),
+          SettingsPage.routeName: (context) => SettingsPage(),
+          MoviesPage.routeName: (context) => MoviesPage(),
+          SearchPage.routeName: (context) => SearchPage(),
+          TVShowsPage.routeName: (context) => TVShowsPage(),
+        },
       ),
-      home: HomePage(),
-      routes: {
-        LoginPage.routeName: (context) => LoginPage(),
-        SettingsPage.routeName: (context) => SettingsPage(),
-        MoviesPage.routeName: (context) => MoviesPage(),
-        SearchPage.routeName: (context) => SearchPage(),
-        TVShowsPage.routeName: (context) => TVShowsPage(),
-      },
     );
   }
 }
 
 class HomePage extends StatefulWidget {
+  static const String routeName = '/home';
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -49,7 +64,6 @@ class _HomePageState extends State<HomePage> {
   List<dynamic> topRatedMovies = [];
   Map<int, String> genresMap = {};
 
-  get bottomNavigationBar => null;
 
   @override
   void initState() {
@@ -223,9 +237,15 @@ class _HomePageState extends State<HomePage> {
     Navigator.pushNamed(context, TVShowsPage.routeName);
   }
 
+  void navigateToMoviesPage(BuildContext context) {
+    Navigator.pushNamed(context, MoviesPage.routeName);
+  }
+
 
   @override
   Widget build(BuildContext context) {
+    final sessionProvider = Provider.of<SessionProvider>(context);
+    final sessionId = sessionProvider.sessionId;
     return Scaffold(
       body: Column(
         children: [
@@ -356,6 +376,7 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         fixedColor: Colors.red,
+        currentIndex: 0,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
@@ -389,11 +410,16 @@ class _HomePageState extends State<HomePage> {
         onTap: (int index){
           switch(index) {
             case 0:
+              break;
             case 1:
+              navigateToMoviesPage(context);
+              break;
             case 2:
               navigateToTVShowsPage(context);
+              break;
             case 3:
               navigateToSearchPage(context);
+              break;
           }
         },
       ),

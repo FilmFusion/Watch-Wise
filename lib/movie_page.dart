@@ -3,9 +3,15 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import 'search_page.dart';
+import 'settings_page.dart';
+import 'main.dart';
+import 'tv_shows.dart';
+import 'movie_details_page.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
 class MoviesPage extends StatefulWidget {
   static const String routeName = '/movies';
-
   @override
   _MoviesPageState createState() => _MoviesPageState();
 }
@@ -191,6 +197,24 @@ class _MoviesPageState extends State<MoviesPage> {
     );
   }
 
+  void navigateToSettingsPage(BuildContext context) {
+    Navigator.pushNamed(context, SettingsPage.routeName);
+  }
+
+  void navigateToSearchPage(BuildContext context) {
+    Navigator.pushNamed(context, SearchPage.routeName);
+  }
+
+  void navigateToTVShowsPage(BuildContext context) {
+    Navigator.pushNamed(context, TVShowsPage.routeName);
+  }
+
+  void navigateToHomePage(BuildContext context) {
+    Navigator.pushNamed(context, HomePage.routeName);
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -209,62 +233,58 @@ class _MoviesPageState extends State<MoviesPage> {
           ],
         ),
       ),
-    );
-  }
-}
-
-class MovieDetailsPage extends StatelessWidget {
-  static const String routeName = '/movie-details';
-
-  final dynamic movie;
-
-  const MovieDetailsPage({Key? key, required this.movie}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(movie['title']),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: double.infinity,
-              height: 200,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  'https://image.tmdb.org/t/p/w500${movie['backdrop_path']}',
-                  fit: BoxFit.cover,
-                ),
-              ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: 1,
+        fixedColor: Colors.red,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home,
+              color: Colors.white,
             ),
-            SizedBox(height: 16),
-            Text(
-              movie['title'],
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.movie,
+              color: Colors.white,
             ),
-            SizedBox(height: 8),
-            Text(
-              'Release Date: ${movie['release_date']}',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+            label: 'Movies',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.tv,
+              color: Colors.white,
             ),
-            SizedBox(height: 8),
-            Text(
-              'Overview',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            label: 'TV Shows',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.search,
+              color: Colors.white,
             ),
-            SizedBox(height: 4),
-            Text(
-              movie['overview'],
-              style: TextStyle(fontSize: 14),
-            ),
-          ],
-        ),
+            label: 'Search',
+          ),
+        ],
+        onTap: (int index){
+          switch(index) {
+            case 0:
+              navigateToHomePage(context);
+              break;
+            case 1:
+              break;
+            case 2:
+              navigateToTVShowsPage(context);
+              break;
+            case 3:
+              navigateToSearchPage(context);
+              break;
+          }
+        },
       ),
     );
   }
 }
+
+
